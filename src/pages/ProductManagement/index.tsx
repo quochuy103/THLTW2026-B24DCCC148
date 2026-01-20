@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Modal, Form, Input, InputNumber, Popconfirm, message, Card } from 'antd';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
 
 interface Product {
   id: number;
@@ -20,6 +20,7 @@ const initialData: Product[] = [
 const ProductManagement: React.FC = () => {
   const [products, setProducts] = useState<Product[]>(initialData);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [searchText, setSearchText] = useState('');
   const [form] = Form.useForm();
 
@@ -30,19 +31,39 @@ const ProductManagement: React.FC = () => {
     message.success('Xóa sản phẩm thành công');
   };
 
-  // Handle Add
-  const handleAdd = (values: any) => {
-    const newProduct: Product = {
-      id: Math.floor(Math.random() * 100000), // Simple ID generation
-      name: values.name,
-      price: values.price,
-      quantity: values.quantity,
-    };
-    setProducts([newProduct, ...products]);
-    message.success('Thêm sản phẩm thành công');
+  // Handle Add or Edit
+  const handleSave = (values: any) => {
+    if (editingProduct) {
+      // Edit mode
+      const updatedProducts = products.map((item) =>
+        item.id === editingProduct.id
+          ? { ...item, name: values.name, price: values.price, quantity: values.quantity }
+          : item
+      );
+      setProducts(updatedProducts);
+      message.success('Cập nhật sản phẩm thành công');
+    } else {
+      // Add mode
+      const newProduct: Product = {
+        id: Math.floor(Math.random() * 100000), // Simple ID generation
+        name: values.name,
+        price: values.price,
+        quantity: values.quantity,
+      };
+      setProducts([newProduct, ...products]);
+      message.success('Thêm sản phẩm thành công');
+    }
     setIsModalVisible(false);
+    setEditingProduct(null);
     form.resetFields();
   };
+
+  const handleEdit = (record: Product) => {
+    setEditingProduct(record);
+    form.setFieldsValue(record);
+    setIsModalVisible(true);
+  };
+
 
   // Filter products
   const filteredProducts = products.filter((item) =>
@@ -79,16 +100,27 @@ const ProductManagement: React.FC = () => {
       key: 'action',
       align: 'center' as const,
       render: (_: any, record: Product) => (
-        <Popconfirm
-          title="Bạn có chắc chắn muốn xóa sản phẩm này không?"
-          onConfirm={() => handleDelete(record.id)}
-          okText="Có"
-          cancelText="Không"
-        >
-          <Button type="primary" danger icon={<DeleteOutlined />} size="small">
-            Xóa
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+          <Button
+            type="primary"
+            icon={<EditOutlined />}
+            size="small"
+            onClick={() => handleEdit(record)}
+            style = {{backgroundColor: 'black', border:'none'}}
+          >
+            Sửa
           </Button>
-        </Popconfirm>
+          <Popconfirm
+            title="Bạn có chắc chắn muốn xóa sản phẩm này không?"
+            onConfirm={() => handleDelete(record.id)}
+            okText="Có"
+            cancelText="Không"
+          >
+            <Button type="primary" danger icon={<DeleteOutlined />} size="small">
+              Xóa
+            </Button>
+          </Popconfirm>
+        </div>
       ),
     },
   ];
@@ -97,7 +129,11 @@ const ProductManagement: React.FC = () => {
     <Card 
       title="Quản lý Sản phẩm" 
       extra={
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalVisible(true)}>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => {
+          setEditingProduct(null);
+          form.resetFields();
+          setIsModalVisible(true);
+        }}>
           Thêm sản phẩm
         </Button>
       }
@@ -118,18 +154,22 @@ const ProductManagement: React.FC = () => {
       />
 
       <Modal
-        title="Thêm sản phẩm mới"
+        title={editingProduct ? "Cập nhật sản phẩm" : "Thêm sản phẩm mới"}
         visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
+        onCancel={() => {
+          setIsModalVisible(false);
+          setEditingProduct(null);
+          form.resetFields();
+        }}
         onOk={() => form.submit()}
-        okText="Thêm"
+        okText={editingProduct ? "Cập nhật" : "Thêm"}
         cancelText="Hủy"
         destroyOnClose
       >
         <Form
           form={form}
           layout="vertical"
-          onFinish={handleAdd}
+          onFinish={handleSave}
         >
           <Form.Item
             name="name"
