@@ -21,9 +21,23 @@
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
-		component: './TrangChu',
-		icon: 'HomeOutlined',
+		component: './Dashboard',
+		icon: 'DashboardOutlined',
 	},
+	{
+		path: '/products',
+		name: 'Quản lý Sản phẩm',
+		component: './Products',
+		icon: 'ShopOutlined',
+	},
+	{
+		path: '/orders',
+		name: 'Quản lý Đơn hàng',
+		component: './Orders',
+		icon: 'ShoppingCartOutlined',
+	},
+    // Old routes kept for reference or removal if desired, but user asked for these 3 mainly.
+    // I will comment out conflicting ones or keep them if unique.
 	{
 		path: '/gioi-thieu',
 		name: 'About',
@@ -35,19 +49,22 @@
 		name: 'RandomUser',
 		component: './RandomUser',
 		icon: 'ArrowsAltOutlined',
+        hideInMenu: true,
 	},
 	{
 		path: '/todo-list',
 		name: 'TodoList',
 		icon: 'OrderedListOutlined',
 		component: './TodoList',
+        hideInMenu: true,
 	},
-	{
-		path: '/product-management',
-		name: 'Quản lý Sản phẩm',
-		component: './ProductManagement',
-		icon: 'TableOutlined',
-	},
+    // Removing old product-management path to avoid confusion
+	// {
+	// 	path: '/product-management',
+	// 	name: 'Quản lý Sản phẩm',
+	// 	component: './ProductManagement',
+	// 	icon: 'TableOutlined',
+	// },
 
 
 
@@ -75,6 +92,7 @@
 	},
 	{
 		path: '/',
+        redirect: '/dashboard',
 	},
 	{
 		path: '/403',
