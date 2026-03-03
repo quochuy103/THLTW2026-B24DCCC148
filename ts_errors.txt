@@ -1,0 +1,18 @@
+﻿src/components/Loading/index.tsx(1,26): error TS6133: 'HomeOutlined' is declared but its value is never read.
+src/components/OneSignalBounder/index.tsx(43,9): error TS6133: 'top' is declared but its value is never read.
+src/components/OneSignalBounder/index.tsx(57,8): error TS6133: 'receiveMessage' is declared but its value is never read.
+src/models/tienich/caidat.ts(68,33): error TS7030: Not all code paths return a value.
+src/pages/GuessingGame/index.tsx(4,31): error TS2307: Cannot find module '@ant-design/pro-components' or its corresponding type declarations.
+src/pages/Orders/index.tsx(7,3): error TS6133: 'Space' is declared but its value is never read.
+src/pages/Orders/index.tsx(21,3): error TS6133: 'List' is declared but its value is never read.
+src/pages/Orders/index.tsx(22,3): error TS6133: 'Statistic' is declared but its value is never read.
+src/pages/Orders/index.tsx(27,1): error TS6133: 'Product' is declared but its value is never read.
+src/pages/Orders/index.tsx(139,9): error TS6133: 'calculateTotalPreview' is declared but its value is never read.
+src/pages/RandomUser/index.tsx(2,38): error TS6133: 'Select' is declared but its value is never read.
+src/pages/RandomUser/index.tsx(43,4): error TS2322: Type '"name"' is not assignable to type '"index" | keyof Record | [keyof Record, string] | undefined'.
+src/pages/RandomUser/index.tsx(49,4): error TS2322: Type '"url"' is not assignable to type '"index" | keyof Record | [keyof Record, string] | undefined'.
+src/pages/RandomUser/index.tsx(100,18): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'SetStateAction<number>'.
+  Type 'undefined' is not assignable to type 'SetStateAction<number>'.
+src/pages/RandomUser/index.tsx(101,17): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'SetStateAction<number>'.
+src/pages/StudyTracker/index.tsx(4,31): error TS2307: Cannot find module '@ant-design/pro-components' or its corresponding type declarations.
+src/pages/TodoList/TodoItem.tsx(6,18): error TS6133: 'index' is declared but its value is never read.

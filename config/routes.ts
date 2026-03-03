@@ -36,6 +36,18 @@
 		component: './Orders',
 		icon: 'ShoppingCartOutlined',
 	},
+	{
+		path: '/game',
+		name: 'Trò chơi Đoán Số',
+		component: './GuessingGame',
+		icon: 'PlayCircleOutlined',
+	},
+	{
+		path: '/study',
+		name: 'Theo dõi Học tập',
+		component: './StudyTracker',
+		icon: 'ReadOutlined',
+	},
     // Old routes kept for reference or removal if desired, but user asked for these 3 mainly.
     // I will comment out conflicting ones or keep them if unique.
 	{

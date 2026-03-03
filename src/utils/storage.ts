@@ -1,7 +1,7 @@
-
 export const StorageKeys = {
   PRODUCTS: 'APP_PRODUCTS',
   ORDERS: 'APP_ORDERS',
+  STUDY_TRACKER: 'APP_STUDY_TRACKER',
 };
 
 export const getStorageData = <T>(key: string, initialValue: T): T => {
