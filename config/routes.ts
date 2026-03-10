@@ -48,13 +48,23 @@
 		component: './StudyTracker',
 		icon: 'ReadOutlined',
 	},
-    // Old routes kept for reference or removal if desired, but user asked for these 3 mainly.
-    // I will comment out conflicting ones or keep them if unique.
+	{
+		path: '/keo-bua-bao',
+		name: 'Kéo Búa Bao',
+		component: './KeoBuaBao',
+		icon: 'TrophyOutlined',
+	},
 	{
 		path: '/gioi-thieu',
 		name: 'About',
 		component: './TienIch/GioiThieu',
 		hideInMenu: true,
+	},
+	{
+		path: '/question-bank-management',
+		name: 'Ngân hàng Đề thi',
+		component: './QuestionBankManagement',
+		icon: 'DatabaseOutlined',
 	},
 	{
 		path: '/random-user',
@@ -77,7 +87,6 @@
 	// 	component: './ProductManagement',
 	// 	icon: 'TableOutlined',
 	// },
-
 
 
 	{
