@@ -16,7 +16,6 @@
 		],
 	},
 
-
 	// DEFAULT MENU
 	{
 		path: '/dashboard',
@@ -67,27 +66,32 @@
 		icon: 'DatabaseOutlined',
 	},
 	{
+		path: '/appointment-management',
+		name: 'Quản lý Lịch Hẹn',
+		component: './AppointmentManagement/AdminDashboard',
+		icon: 'CalendarOutlined',
+	},
+	{
 		path: '/random-user',
 		name: 'RandomUser',
 		component: './RandomUser',
 		icon: 'ArrowsAltOutlined',
-        hideInMenu: true,
+		hideInMenu: true,
 	},
 	{
 		path: '/todo-list',
 		name: 'TodoList',
 		icon: 'OrderedListOutlined',
 		component: './TodoList',
-        hideInMenu: true,
+		hideInMenu: true,
 	},
-    // Removing old product-management path to avoid confusion
+	// Removing old product-management path to avoid confusion
 	// {
 	// 	path: '/product-management',
 	// 	name: 'Quản lý Sản phẩm',
 	// 	component: './ProductManagement',
 	// 	icon: 'TableOutlined',
 	// },
-
 
 	{
 		path: '/notification',
@@ -113,7 +117,7 @@
 	},
 	{
 		path: '/',
-        redirect: '/dashboard',
+		redirect: '/dashboard',
 	},
 	{
 		path: '/403',
