@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Card, Row, Col, Statistic, DatePicker, Table, Tabs, Empty, Space } from 'antd';
-import { DollarOutlined, CalendarOutlined } from '@ant-design/icons';
+import { Card, DatePicker, Table, Tabs, Empty, Space } from 'antd';
 import useAppointmentModel from '@/models/appointment';
 import { statisticsService } from '@/services/appointment';
 import dayjs from 'dayjs';
@@ -25,9 +24,6 @@ export default function Statistics() {
 	const serviceStats = statisticsService.getServiceStats(appointments, services, startDate, endDate);
 
 	// Calculate totals
-	const totalAppointments = appointmentStats.reduce((sum, stat) => sum + stat.count, 0);
-	const totalCompleted = appointmentStats.reduce((sum, stat) => sum + stat.completed, 0);
-	const totalCancelled = appointmentStats.reduce((sum, stat) => sum + stat.cancelled, 0);
 	const totalRevenue = appointments
 		.filter((apt) => apt.appointmentDate >= startDate && apt.appointmentDate <= endDate && apt.status === 'Hoàn thành')
 		.reduce((sum, apt) => sum + apt.totalPrice, 0);
@@ -157,51 +153,7 @@ export default function Statistics() {
 				</Space>
 			</Card>
 
-			{/* Summary Cards */}
-			<Row gutter={16} style={{ marginBottom: 24 }}>
-				<Col span={6}>
-					<Card>
-						<Statistic
-							title='Tổng lịch hẹn'
-							value={totalAppointments}
-							prefix={<CalendarOutlined />}
-							valueStyle={{ color: '#1890ff' }}
-						/>
-					</Card>
-				</Col>
-				<Col span={6}>
-					<Card>
-						<Statistic
-							title='Hoàn thành'
-							value={totalCompleted}
-							valueStyle={{ color: '#52c41a' }}
-							suffix={`(${totalAppointments > 0 ? ((totalCompleted / totalAppointments) * 100).toFixed(0) : 0}%)`}
-						/>
-					</Card>
-				</Col>
-				<Col span={6}>
-					<Card>
-						<Statistic
-							title='Hủy'
-							value={totalCancelled}
-							valueStyle={{ color: '#ff4d4f' }}
-							suffix={`(${totalAppointments > 0 ? ((totalCancelled / totalAppointments) * 100).toFixed(0) : 0}%)`}
-						/>
-					</Card>
-				</Col>
-				<Col span={6}>
-					<Card>
-						<Statistic
-							title='Doanh thu'
-							value={totalRevenue}
-							prefix={<DollarOutlined />}
-							valueStyle={{ color: '#faad14' }}
-							formatter={(value: any) => new Intl.NumberFormat('vi-VN').format(value as number)}
-							suffix='VND'
-						/>
-					</Card>
-				</Col>
-			</Row>
+
 
 			{/* Tabs */}
 			<Tabs>
