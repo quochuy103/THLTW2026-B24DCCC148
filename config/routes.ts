@@ -115,6 +115,41 @@
 		layout: false,
 		hideInMenu: true,
 	},
+
+	// Diploma BLL (Sổ Văn Bằng Tốt Nghiệp) Management Routes
+	{
+		path: '/diploma-bll',
+		name: 'Quản Lý Sổ Văn Bằng',
+		icon: 'FileTextOutlined',
+		routes: [
+			{
+				path: '/diploma-bll/register',
+				name: 'Quản Lý Sổ Văn Bằng',
+				component: './DiplomaBLL/DiplomaRegisterManagement',
+			},
+			{
+				path: '/diploma-bll/decision',
+				name: 'Quyết Định Tốt Nghiệp',
+				component: './DiplomaBLL/GraduationDecisionManagement',
+			},
+			{
+				path: '/diploma-bll/form-config',
+				name: 'Cấu Hình Biểu Mẫu',
+				component: './DiplomaBLL/FormConfiguration',
+			},
+			{
+				path: '/diploma-bll/diploma-info',
+				name: 'Quản Lý Thông Tin Văn Bằng',
+				component: './DiplomaBLL/DiplomaManagement',
+			},
+			{
+				path: '/diploma-bll/lookup',
+				name: 'Tra Cứu Văn Bằng',
+				component: './DiplomaBLL/DiplomaLookup',
+			},
+		],
+	},
+
 	{
 		path: '/',
 		redirect: '/dashboard',
