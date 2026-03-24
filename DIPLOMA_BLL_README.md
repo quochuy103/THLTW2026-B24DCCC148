@@ -1,23 +1,27 @@
 # Hệ Thống Quản Lý Sổ Văn Bằng Tốt Nghiệp (Diploma Management System)
 
 ## Mô Tả
+
 Ứng dụng quản lý sổ văn bằng tốt nghiệp giúp phòng chuyên viên quản lý sổ văn bằng và cho phép người dùng tra cứu thông tin văn bằng.
 
 ## Các Chức Năng Chính
 
 ### 1. Quản Lý Sổ Văn Bằng (`/diploma-bll/register`)
+
 - **Tạo sổ mới**: Tạo sổ văn bằng cho mỗi năm học
 - **Số vào sổ tự động**: Số thứ tự tự động tăng dần, reset về 1 khi mở sổ mới
 - **Chỉnh sửa/Xóa**: Cập nhật thông tin hoặc xóa sổ không cần thiết
 - **Quản lý trạng thái**: Đánh dấu sổ hoạt động hay không hoạt động
 
 **Thông tin sổ văn bằng:**
+
 - Năm: Năm đào tạo
 - Số hiệu sổ: Mã định danh của sổ
 - Số thứ tự hiện tại: Số vào sổ hiện tại (dùng cho sinh viên tiếp theo)
 - Mô tả: Ghi chú thêm
 
 ### 2. Quyết Định Tốt Nghiệp (`/diploma-bll/decision`)
+
 - **Quản lý đợt tốt nghiệp**: Mỗi năm có nhiều đợt sinh viên tốt nghiệp
 - **Thông tin quyết định**:
   - Số QĐ: Số hiệu quyết định
@@ -29,6 +33,7 @@
 - **Thống kê**: Xem tổng lượt tra cứu cho mỗi quyết định
 
 ### 3. Cấu Hình Biểu Mẫu (`/diploma-bll/form-config`)
+
 - **Quản trị viên cấu hình**: Định nghĩa các trường thông tin bổ sung
 - **Kiểu dữ liệu hỗ trợ**:
   - String (Văn bản): Dân tộc, Nơi sinh, v.v.
@@ -42,6 +47,7 @@
 - **Trạng thái bắt buộc**: Đánh dấu trường nào phải nhập bắt buộc
 
 ### 4. Quản Lý Thông Tin Văn Bằng (`/diploma-bll/diploma-info`)
+
 - **Tạo thông tin sinh viên**: Nhập thông tin văn bằng cho từng sinh viên
 - **Số vào sổ tự động**: Tự động tăng theo sổ đã chọn, không cho chỉnh sửa
 - **Thông tin mặc định**:
@@ -54,6 +60,7 @@
 - **Liên kết với quyết định**: Xác định sinh viên công nhân theo quyết định nào
 
 ### 5. Tra Cứu Văn Bằng (`/diploma-bll/lookup`)
+
 - **Cho người dùng tra cứu**: Không yêu cầu đăng nhập
 - **Tham số tìm kiếm**:
   - Số hiệu văn bằng
@@ -85,13 +92,13 @@ src/
 
 ## Routes
 
-| Đường dẫn | Tên Chức Năng | Mô Tả |
-|----------|--------------|-------|
-| `/diploma-bll/register` | Quản Lý Sổ Văn Bằng | Tạo, chỉnh sửa, xóa sổ văn bằng |
-| `/diploma-bll/decision` | Quyết Định Tốt Nghiệp | Quản lý các đợt tốt nghiệp |
-| `/diploma-bll/form-config` | Cấu Hình Biểu Mẫu | Cấu hình các trường thông tin |
-| `/diploma-bll/diploma-info` | Quản Lý Thông Tin Văn Bằng | Quản lý thông tin sinh viên |
-| `/diploma-bll/lookup` | Tra Cứu Văn Bằng | Cho người dùng tra cứu |
+| Đường dẫn                   | Tên Chức Năng              | Mô Tả                           |
+| --------------------------- | -------------------------- | ------------------------------- |
+| `/diploma-bll/register`     | Quản Lý Sổ Văn Bằng        | Tạo, chỉnh sửa, xóa sổ văn bằng |
+| `/diploma-bll/decision`     | Quyết Định Tốt Nghiệp      | Quản lý các đợt tốt nghiệp      |
+| `/diploma-bll/form-config`  | Cấu Hình Biểu Mẫu          | Cấu hình các trường thông tin   |
+| `/diploma-bll/diploma-info` | Quản Lý Thông Tin Văn Bằng | Quản lý thông tin sinh viên     |
+| `/diploma-bll/lookup`       | Tra Cứu Văn Bằng           | Cho người dùng tra cứu          |
 
 ## Công Nghệ Sử Dụng
 
@@ -104,6 +111,7 @@ src/
 ## Các Models/Types
 
 ### DiplomaRegister (Sổ Văn Bằng)
+
 ```typescript
 {
   id: string;
@@ -116,20 +124,22 @@ src/
 ```
 
 ### GraduationDecision (Quyết Định Tốt Nghiệp)
+
 ```typescript
 {
-  id: string;
-  decisionNumber: string;
-  decisionDate: string;
-  summary: string;
-  registerId: string;
-  totalStudents: number;
-  lookupCount: number;
-  status: 'active' | 'inactive';
+	id: string;
+	decisionNumber: string;
+	decisionDate: string;
+	summary: string;
+	registerId: string;
+	totalStudents: number;
+	lookupCount: number;
+	status: 'active' | 'inactive';
 }
 ```
 
 ### FormField (Trường Biểu Mẫu)
+
 ```typescript
 {
   id: string;
@@ -143,6 +153,7 @@ src/
 ```
 
 ### DiplomaInfo (Thông Tin Văn Bằng)
+
 ```typescript
 {
   id: string;
@@ -161,6 +172,7 @@ src/
 ## API Endpoints
 
 Backend cần cung cấp các endpoint:
+
 - `/api/diploma/registers` - CRUD sổ văn bằng
 - `/api/diploma/decisions` - CRUD quyết định
 - `/api/diploma/form-fields` - CRUD trường biểu mẫu

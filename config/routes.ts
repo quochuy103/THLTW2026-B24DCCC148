@@ -1,4 +1,4 @@
-﻿export default [
+export default [
 	{
 		path: '/user',
 		layout: false,
@@ -94,6 +94,39 @@
 	// },
 
 	{
+		path: '/diploma',
+		name: 'Quản lý Văn bằng',
+		icon: 'SafetyCertificateOutlined',
+		routes: [
+			{
+				path: '/diploma/registry',
+				name: 'Sổ văn bằng',
+				component: './DiplomaBLL/DiplomaRegistry',
+			},
+			{
+				path: '/diploma/decision',
+				name: 'Quyết định tốt nghiệp',
+				component: './DiplomaBLL/GraduationDecision',
+			},
+			{
+				path: '/diploma/template',
+				name: 'Cấu hình biểu mẫu',
+				component: './DiplomaBLL/DiplomaTemplate',
+			},
+			{
+				path: '/diploma/information',
+				name: 'Thông tin văn bằng',
+				component: './DiplomaBLL/DiplomaInformation',
+			},
+			{
+				path: '/diploma/lookup',
+				name: 'Tra cứu văn bằng',
+				component: './DiplomaBLL/DiplomaLookup',
+			},
+		],
+	},
+
+	{
 		path: '/notification',
 		routes: [
 			{
@@ -116,39 +149,7 @@
 		hideInMenu: true,
 	},
 
-	// Diploma BLL (Sổ Văn Bằng Tốt Nghiệp) Management Routes
-	{
-		path: '/diploma-bll',
-		name: 'Quản Lý Sổ Văn Bằng',
-		icon: 'FileTextOutlined',
-		routes: [
-			{
-				path: '/diploma-bll/register',
-				name: 'Quản Lý Sổ Văn Bằng',
-				component: './DiplomaBLL/DiplomaRegisterManagement',
-			},
-			{
-				path: '/diploma-bll/decision',
-				name: 'Quyết Định Tốt Nghiệp',
-				component: './DiplomaBLL/GraduationDecisionManagement',
-			},
-			{
-				path: '/diploma-bll/form-config',
-				name: 'Cấu Hình Biểu Mẫu',
-				component: './DiplomaBLL/FormConfiguration',
-			},
-			{
-				path: '/diploma-bll/diploma-info',
-				name: 'Quản Lý Thông Tin Văn Bằng',
-				component: './DiplomaBLL/DiplomaManagement',
-			},
-			{
-				path: '/diploma-bll/lookup',
-				name: 'Tra Cứu Văn Bằng',
-				component: './DiplomaBLL/DiplomaLookup',
-			},
-		],
-	},
+	
 
 	{
 		path: '/',

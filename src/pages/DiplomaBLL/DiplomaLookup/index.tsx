@@ -1,310 +1,177 @@
 import React, { useState } from 'react';
-import {
-  Card,
-  Form,
-  Input,
-  Button,
-  Table,
-  Space,
-  message,
-  Divider,
-  Statistic,
-  Row,
-  Col,
-  Tag,
-  Alert,
-  DatePicker,
-  Drawer,
-  Descriptions,
-} from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import dayjs from 'dayjs';
+import { PageContainer } from '@ant-design/pro-layout';
+import { Card, Button, Form, Input, DatePicker, message, Descriptions, Alert, Typography, Divider, Space } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import {
-  lookupDiploma,
-  getLookupStatistics,
-  recordLookup,
+import dayjs from 'dayjs';
+import { 
+  getDiplomas, DiplomaRecord,
+  getDecisions, GraduationDecision,
+  getRegistries, DiplomaRegistry,
+  getTemplateFields, DiplomaTemplateField,
+  incrementLookupCount
 } from '@/services/diploma';
-import type { DiplomaLookupResponse, GraduationDecision } from '@/models/diploma';
 
-const DiplomaLookup: React.FC = () => {
+const { Title, Text } = Typography;
+
+const DiplomaLookupPage: React.FC = () => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<DiplomaLookupResponse[]>([]);
-  const [searchCount, setSearchCount] = useState(0);
-  const [selectedRecord, setSelectedRecord] = useState<DiplomaLookupResponse | null>(null);
-  const [drawerVisible, setDrawerVisible] = useState(false);
-  const [statistics, setStatistics] = useState<{ [key: string]: number }>({});
+  const [searchResults, setSearchResults] = useState<DiplomaRecord[]>([]);
+  const [hasSearched, setHasSearched] = useState(false);
 
-  // Tra cứu văn bằng
+  const [decisionsCache, setDecisionsCache] = useState<Record<string, GraduationDecision>>({});
+  const [registriesCache, setRegistriesCache] = useState<Record<number, DiplomaRegistry>>({});
+  const [templatesCache, setTemplatesCache] = useState<DiplomaTemplateField[]>([]);
+
   const handleSearch = async () => {
     try {
-      const values = form.getFieldsValue();
+      const values = await form.validateFields();
       
-      // Kiểm tra ít nhất 2 tham số được nhập
-      const filledParams = Object.entries(values)
-        .filter(([, value]) => value !== undefined && value !== '' && value !== null);
-      
-      if (filledParams.length < 2) {
-        message.error('Vui lòng nhập ít nhất 2 tham số để tra cứu');
+      const filledKeys = Object.keys(values).filter(key => {
+        const val = values[key];
+        return val !== undefined && val !== null && val !== '';
+      });
+
+      if (filledKeys.length < 2) {
+        message.warning('Vui lòng nhập ít nhất 2 thông tin để tra cứu.');
         return;
       }
 
-      setLoading(true);
-      
-      const searchParams: any = {};
-      if (values.diplomaNumber) searchParams.diplomaNumber = values.diplomaNumber;
-      if (values.sequenceNumber) searchParams.sequenceNumber = values.sequenceNumber;
-      if (values.studentCode) searchParams.studentCode = values.studentCode;
-      if (values.studentName) searchParams.studentName = values.studentName;
-      if (values.dateOfBirth) searchParams.dateOfBirth = values.dateOfBirth.format('YYYY-MM-DD');
+      const allDiplomas = getDiplomas();
+      const allDecisions = getDecisions();
+      const allRegistries = getRegistries();
+      const allTemplates = getTemplateFields();
 
-      const response = await lookupDiploma(searchParams);
-      
-      if (response.success && response.data) {
-        setResults(response.data);
-        setSearchCount(response.data.length);
-        
-        // Ghi nhận lượt tra cứu cho từng quyết định
-        response.data.forEach(async (result) => {
-          await recordLookup(result.diploma.id, result.decision.id);
-          
-          // Cập nhật thống kê
-          const stats = await getLookupStatistics(result.decision.id);
-          if (stats.success) {
-            setStatistics(prev => ({
-              ...prev,
-              [result.decision.id]: stats.data?.lookupCount || 0,
-            }));
-          }
+      const dCache: Record<string, GraduationDecision> = {};
+      allDecisions.forEach(d => dCache[d.decisionId] = d);
+      setDecisionsCache(dCache);
+
+      const rCache: Record<number, DiplomaRegistry> = {};
+      allRegistries.forEach(r => rCache[r.year] = r);
+      setRegistriesCache(rCache);
+
+      setTemplatesCache(allTemplates);
+
+      const matched = allDiplomas.filter(diploma => {
+        if (values.diplomaNumber && diploma.diplomaNumber !== values.diplomaNumber) return false;
+        if (values.registryNumber && diploma.registryNumber.toString() !== values.registryNumber) return false;
+        if (values.studentId && diploma.studentId !== values.studentId) return false;
+        if (values.fullName && !diploma.fullName.toLowerCase().includes(values.fullName.toLowerCase())) return false;
+        if (values.dateOfBirth && diploma.dateOfBirth !== values.dateOfBirth.format('YYYY-MM-DD')) return false;
+
+        return true;
+      });
+
+      setSearchResults(matched);
+      setHasSearched(true);
+
+      if (matched.length > 0) {
+        message.success(`Tìm thấy ${matched.length} kết quả.`);
+        const distinctDecisions = new Set(matched.map(m => m.decisionId));
+        distinctDecisions.forEach(decId => {
+          incrementLookupCount(decId);
         });
-
-        message.success(`Tìm được ${response.data.length} kết quả`);
       } else {
-        setResults([]);
-        message.info('Không tìm thấy kết quả');
+        message.info('Không tìm thấy kết quả nào trùng khớp.');
       }
+
     } catch (error) {
-      message.error('Lỗi: ' + (error as any).message);
-    } finally {
-      setLoading(false);
+      console.error("Validation error", error);
     }
   };
 
-  // Xem chi tiết
-  const handleViewDetails = (record: DiplomaLookupResponse) => {
-    setSelectedRecord(record);
-    setDrawerVisible(true);
-  };
-
-  // Reset form
   const handleReset = () => {
     form.resetFields();
-    setResults([]);
+    setSearchResults([]);
+    setHasSearched(false);
   };
 
-  const columns: ColumnsType<DiplomaLookupResponse> = [
-    {
-      title: 'Số Hiệu Văn Bằng',
-      dataIndex: ['diploma', 'diplomaNumber'],
-      key: 'diplomaNumber',
-      width: 150,
-    },
-    {
-      title: 'Số Vào Sổ',
-      dataIndex: ['diploma', 'sequenceNumber'],
-      key: 'sequenceNumber',
-      width: 100,
-    },
-    {
-      title: 'MSV',
-      dataIndex: ['diploma', 'studentCode'],
-      key: 'studentCode',
-      width: 120,
-    },
-    {
-      title: 'Họ Tên',
-      dataIndex: ['diploma', 'studentName'],
-      key: 'studentName',
-    },
-    {
-      title: 'Ngày Sinh',
-      dataIndex: ['diploma', 'dateOfBirth'],
-      key: 'dateOfBirth',
-      render: (date: string) => dayjs(date).format('DD/MM/YYYY'),
-    },
-    {
-      title: 'Số QĐ',
-      dataIndex: ['decision', 'decisionNumber'],
-      key: 'decisionNumber',
-      width: 120,
-    },
-    {
-      title: 'Thao Tác',
-      key: 'action',
-      width: 120,
-      render: (_, record) => (
-        <Button type="link" size="small" onClick={() => handleViewDetails(record)}>
-          Xem Chi Tiết
-        </Button>
-      ),
-    },
-  ];
-
   return (
-    <Card title="Tra Cứu Thông Tin Văn Bằng">
-      <Alert
-        message="Vui lòng nhập ít nhất 2 tham số để tra cứu thông tin văn bằng"
-        type="info"
-        showIcon
-        style={{ marginBottom: '20px' }}
-      />
-
-      <Card style={{ marginBottom: '20px' }} type="inner">
+    <PageContainer title="Tra cứu văn bằng">
+      <Card title="Thông tin tra cứu" style={{ marginBottom: 24 }}>
+        <Alert 
+          message="Hướng dẫn" 
+          description="Bạn cần cung cấp tối thiểu 2 trong số các thông tin bên dưới để thực hiện tra cứu." 
+          type="info" 
+          showIcon 
+          style={{ marginBottom: 24 }} 
+        />
+        
         <Form form={form} layout="vertical">
-          <Row gutter={16}>
-            <Col xs={24} sm={12} md={8}>
-              <Form.Item label="Số Hiệu Văn Bằng" name="diplomaNumber">
-                <Input placeholder="Nhập số hiệu văn bằng" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <Form.Item label="Số Vào Sổ" name="sequenceNumber">
-                <Input placeholder="Nhập số vào sổ" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <Form.Item label="MSV" name="studentCode">
-                <Input placeholder="Nhập mã sinh viên" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <Form.Item label="Họ Tên" name="studentName">
-                <Input placeholder="Nhập họ tên" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={8}>
-              <Form.Item label="Ngày Sinh" name="dateOfBirth">
-                <DatePicker style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Form.Item>
-            <Space>
-              <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch} loading={loading}>
-                Tìm Kiếm
-              </Button>
-              <Button onClick={handleReset}>
-                Xóa Bộ Lọc
-              </Button>
-            </Space>
+          <Form.Item name="diplomaNumber" label="Số hiệu văn bằng">
+            <Input placeholder="Nhập số hiệu văn bằng" />
           </Form.Item>
+          <Form.Item name="registryNumber" label="Số vào sổ">
+            <Input placeholder="Nhập số vào sổ" />
+          </Form.Item>
+          <Form.Item name="studentId" label="Mã sinh viên">
+            <Input placeholder="Nhập mã sinh viên" />
+          </Form.Item>
+          <Form.Item name="fullName" label="Họ và tên">
+            <Input placeholder="Nhập họ và tên" />
+          </Form.Item>
+          <Form.Item name="dateOfBirth" label="Ngày sinh">
+            <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" placeholder="Chọn ngày sinh" />
+          </Form.Item>
+
+          <Space>
+            <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch}>
+              Tra cứu
+            </Button>
+            <Button onClick={handleReset}>Nhập lại</Button>
+          </Space>
         </Form>
       </Card>
 
-      {searchCount > 0 && (
-        <Card style={{ marginBottom: '20px' }} type="inner">
-          <Row gutter={16}>
-            <Col xs={24} sm={12} md={6}>
-              <Statistic title="Tổng Kết Quả" value={searchCount} valueStyle={{ color: '#1890ff' }} />
-            </Col>
-          </Row>
+      {hasSearched && (
+        <Card title="Kết quả tra cứu">
+          {searchResults.length === 0 ? (
+            <div style={{ textAlign: 'center', margin: '40px 0' }}>
+              <Text type="secondary">Không tìm thấy thông tin nào phù hợp với yêu cầu.</Text>
+            </div>
+          ) : (
+            searchResults.map(diploma => {
+              const decision = decisionsCache[diploma.decisionId];
+              return (
+                <div key={diploma.id} style={{ marginBottom: 32 }}>
+                  <Descriptions title={`Văn bằng: ${diploma.fullName} - ${diploma.studentId}`} bordered>
+                    <Descriptions.Item label="Số hiệu VB">{diploma.diplomaNumber}</Descriptions.Item>
+                    <Descriptions.Item label="Số vào sổ">{diploma.registryNumber}</Descriptions.Item>
+                    <Descriptions.Item label="Ngày sinh">{dayjs(diploma.dateOfBirth).format('DD/MM/YYYY')}</Descriptions.Item>
+                    
+                    {diploma.dynamicData && Object.keys(diploma.dynamicData).map(key => {
+                      const def = templatesCache.find(t => t.id === key);
+                      if (!def) return null;
+                      const val = def.dataType === 'Date' ? dayjs(diploma.dynamicData[key]).format('DD/MM/YYYY') : diploma.dynamicData[key];
+                      return (
+                        <Descriptions.Item key={key} label={def.fieldName}>
+                          {val}
+                        </Descriptions.Item>
+                      );
+                    })}
+
+                    <Descriptions.Item label="Thuộc Quyết định" span={3}>
+                      {decision ? (
+                        <Space direction="vertical" size={2}>
+                          <Text strong>Quyết định số: {decision.decisionNumber}</Text>
+                          <Text>Ngày ban hành: {dayjs(decision.issueDate).format('DD/MM/YYYY')}</Text>
+                          <Text>Trích yếu: {decision.summary}</Text>
+                          <Text>Năm sổ VB: {decision.registryYear}</Text>
+                        </Space>
+                      ) : (
+                        <Text type="danger">Không tìm thấy thông tin quyết định</Text>
+                      )}
+                    </Descriptions.Item>
+                  </Descriptions>
+                  <Divider />
+                </div>
+              );
+            })
+          )}
         </Card>
       )}
 
-      <Table
-        columns={columns}
-        dataSource={results}
-        loading={loading}
-        rowKey={(record) => record.diploma.id}
-        pagination={results.length > 10}
-        scroll={{ x: 1200 }}
-      />
-
-      <Drawer
-        title="Chi Tiết Thông Tin Văn Bằng"
-        placement="right"
-        onClose={() => setDrawerVisible(false)}
-        open={drawerVisible}
-        width={600}
-      >
-        {selectedRecord && (
-          <>
-            <Descriptions title="Thông Tin Văn Bằng" bordered column={1} style={{ marginBottom: '20px' }}>
-              <Descriptions.Item label="Số Hiệu Văn Bằng">
-                {selectedRecord.diploma.diplomaNumber}
-              </Descriptions.Item>
-              <Descriptions.Item label="Số Vào Sổ">
-                {selectedRecord.diploma.sequenceNumber}
-              </Descriptions.Item>
-              <Descriptions.Item label="Mã Sinh Viên">
-                {selectedRecord.diploma.studentCode}
-              </Descriptions.Item>
-              <Descriptions.Item label="Họ Tên">
-                {selectedRecord.diploma.studentName}
-              </Descriptions.Item>
-              <Descriptions.Item label="Ngày Sinh">
-                {dayjs(selectedRecord.diploma.dateOfBirth).format('DD/MM/YYYY')}
-              </Descriptions.Item>
-              <Descriptions.Item label="Trạng Thái">
-                <Tag color={selectedRecord.diploma.status === 'active' ? 'green' : 'red'}>
-                  {selectedRecord.diploma.status === 'active' ? 'Hoạt động' : 'Không hoạt động'}
-                </Tag>
-              </Descriptions.Item>
-
-              {selectedRecord.diploma.customFields && Object.keys(selectedRecord.diploma.customFields).length > 0 && (
-                <>
-                  <Divider />
-                  {Object.entries(selectedRecord.diploma.customFields).map(([key, value]) => (
-                    <Descriptions.Item key={key} label={key}>
-                      {typeof value === 'string' && value.match(/^\d{4}-\d{2}-\d{2}$/)
-                        ? dayjs(value).format('DD/MM/YYYY')
-                        : String(value)}
-                    </Descriptions.Item>
-                  ))}
-                </>
-              )}
-            </Descriptions>
-
-            <Divider />
-
-            <Descriptions title="Thông Tin Quyết Định Tốt Nghiệp" bordered column={1}>
-              <Descriptions.Item label="Số QĐ">
-                {selectedRecord.decision.decisionNumber}
-              </Descriptions.Item>
-              <Descriptions.Item label="Ngày Ban Hành">
-                {dayjs(selectedRecord.decision.decisionDate).format('DD/MM/YYYY')}
-              </Descriptions.Item>
-              <Descriptions.Item label="Trích Yếu">
-                {selectedRecord.decision.summary}
-              </Descriptions.Item>
-              <Descriptions.Item label="Tổng Sinh Viên">
-                {selectedRecord.decision.totalStudents}
-              </Descriptions.Item>
-              <Descriptions.Item label="Tổng Lượt Tra Cứu">
-                <Tag color="blue">{selectedRecord.decision.lookupCount}</Tag>
-              </Descriptions.Item>
-            </Descriptions>
-
-            <Divider />
-
-            <Descriptions title="Thông Tin Sổ Văn Bằng" bordered column={1}>
-              <Descriptions.Item label="Năm">
-                {selectedRecord.register.year}
-              </Descriptions.Item>
-              <Descriptions.Item label="Số Hiệu Sổ">
-                {selectedRecord.register.registerNumber}
-              </Descriptions.Item>
-              <Descriptions.Item label="Số Thứ Tự Hiện Tại">
-                {selectedRecord.register.currentSequence}
-              </Descriptions.Item>
-            </Descriptions>
-          </>
-        )}
-      </Drawer>
-    </Card>
+    </PageContainer>
   );
 };
 
-export default DiplomaLookup;
+export default DiplomaLookupPage;

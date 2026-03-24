@@ -55,12 +55,12 @@ declare const APP_CONFIG_TITLE_CTSV: string;
 declare const APP_CONFIG_TITLE_QLKH: string;
 
 declare namespace API {
-  interface Response<T = any> {
-    success: boolean;
-    message?: string;
-    data?: T;
-    code?: number;
-  }
+	interface Response<T = any> {
+		success: boolean;
+		message?: string;
+		data?: T;
+		code?: number;
+	}
 }
 declare const APP_CONFIG_TITLE_VPS: string;
 declare const APP_CONFIG_TITLE_KHAO_THI: string;
