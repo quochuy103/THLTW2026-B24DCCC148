@@ -106,7 +106,7 @@ export const initMockData = () => {
         status: 'Approved',
         historyLogs: [
           {
-            timestamp: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+            timestamp: new Date(Date.now() - 86400000).toISOString(), 
             action: 'Application submitted',
           },
           {

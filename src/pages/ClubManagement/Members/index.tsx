@@ -40,7 +40,7 @@ const MembersPage: React.FC = () => {
   const handleChangeClubOk = () => {
     changeClubForm.validateFields().then(values => {
       const { newClubId } = values;
-      const apps = getApplications(); // get all apps to avoid overriding status of other non-approved
+      const apps = getApplications(); 
       const timestamp = new Date().toISOString();
       const clubName = getClubName(newClubId);
 
