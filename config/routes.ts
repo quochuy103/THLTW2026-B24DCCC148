@@ -127,6 +127,34 @@ export default [
 	},
 
 	{
+		path: '/club-management',
+		name: 'Quản lý CLB',
+		icon: 'TeamOutlined',
+		routes: [
+			{
+				path: '/club-management/dashboard',
+				name: 'Báo cáo & Thống kê',
+				component: './ClubManagement/Dashboard',
+			},
+			{
+				path: '/club-management/clubs',
+				name: 'Câu lạc bộ',
+				component: './ClubManagement/Clubs',
+			},
+			{
+				path: '/club-management/applications',
+				name: 'Đơn đăng ký',
+				component: './ClubManagement/Applications',
+			},
+			{
+				path: '/club-management/members',
+				name: 'Thành viên',
+				component: './ClubManagement/Members',
+			},
+		],
+	},
+
+	{
 		path: '/notification',
 		routes: [
 			{
