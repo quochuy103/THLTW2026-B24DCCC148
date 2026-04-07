@@ -155,6 +155,39 @@ export default [
 	},
 
 	{
+		path: '/travel-planner',
+		name: 'Kế hoạch Du lịch',
+		icon: 'CompassOutlined',
+		routes: [
+			{
+				path: '/travel-planner/destinations',
+				name: 'Khám phá điểm đến',
+				component: './TravelPlanner/Destinations',
+			},
+			{
+				path: '/travel-planner/itinerary',
+				name: 'Lịch trình',
+				component: './TravelPlanner/Itinerary',
+			},
+			{
+				path: '/travel-planner/budget',
+				name: 'Ngân sách',
+				component: './TravelPlanner/Budget',
+			},
+			{
+				path: '/travel-planner/admin',
+				name: 'Quản trị điểm đến',
+				component: './TravelPlanner/AdminDestinations',
+			},
+			{
+				path: '/travel-planner/reports',
+				name: 'Báo cáo & Thống kê',
+				component: './TravelPlanner/Reports',
+			},
+		],
+	},
+
+	{
 		path: '/notification',
 		routes: [
 			{

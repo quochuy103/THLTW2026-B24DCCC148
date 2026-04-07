@@ -58,7 +58,7 @@ const ApplicationsPage: React.FC = () => {
     setIsRejectModalVisible(true);
   };
 
-  const handleRejectOk = () => {
+  const handleRejectOk = () => { 
     rejectForm.validateFields().then(values => {
       const timestamp = new Date().toISOString();
       const reason = values.reason;
