@@ -188,6 +188,19 @@ export default [
 	},
 
 	{
+		path: '/course-management',
+		name: 'Quản lý Khóa học',
+		icon: 'ReadOutlined',
+		routes: [
+			{
+				path: '/course-management/courses',
+				name: 'Danh sách Khóa học',
+				component: './CourseManagement/Courses',
+			},
+		],
+	},
+
+	{
 		path: '/notification',
 		routes: [
 			{
