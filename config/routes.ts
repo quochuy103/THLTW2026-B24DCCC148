@@ -201,6 +201,39 @@ export default [
 	},
 
 	{
+		path: '/blog-management',
+		name: 'Blog',
+		icon: 'FileTextOutlined',
+		routes: [
+			{
+				path: '/blog-management/home',
+				name: 'Trang chủ Blog',
+				component: './BlogManagement/Home',
+			},
+			{
+				path: '/blog-management/post/:slug',
+				component: './BlogManagement/PostDetail',
+				hideInMenu: true,
+			},
+			{
+				path: '/blog-management/about',
+				name: 'Giới thiệu',
+				component: './BlogManagement/About',
+			},
+			{
+				path: '/blog-management/posts',
+				name: 'Quản lý Bài viết',
+				component: './BlogManagement/PostManagement',
+			},
+			{
+				path: '/blog-management/tags',
+				name: 'Quản lý Thẻ',
+				component: './BlogManagement/TagManagement',
+			},
+		],
+	},
+
+	{
 		path: '/notification',
 		routes: [
 			{

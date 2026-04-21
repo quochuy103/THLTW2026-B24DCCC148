@@ -1,0 +1,195 @@
+.searchCard {
+  margin-bottom: 16px;
+}
+
+.searchInput {
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.tagFilterCard {
+  margin-bottom: 20px;
+}
+
+.tagFilterLabel {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.65);
+  margin-bottom: 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filterTag {
+  cursor: pointer;
+  padding: 4px 12px;
+  font-size: 13px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  user-select: none;
+  border: 1px solid #d9d9d9;
+  background: #fff;
+  color: rgba(0, 0, 0, 0.65);
+
+  &:hover {
+    border-color: #1890ff;
+    color: #1890ff;
+  }
+}
+
+.filterTagActive {
+  background: #1890ff;
+  border-color: #1890ff;
+  color: #fff !important;
+
+  &:hover {
+    background: #096dd9;
+    border-color: #096dd9;
+    color: #fff !important;
+  }
+}
+
+.tagCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+  color: inherit;
+  border-radius: 10px;
+  font-size: 11px;
+  padding: 0 5px;
+  margin-left: 5px;
+  min-width: 18px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.filterTagActive .tagCount {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Post Card */
+.postCard {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  }
+}
+
+.cardThumbnail {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .postCard:hover & img {
+    transform: scale(1.04);
+  }
+}
+
+.cardBody {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.cardTag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1890ff;
+  background: #e6f4ff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.85);
+  margin: 0 0 10px;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  .postCard:hover & {
+    color: #1890ff;
+  }
+}
+
+.cardSummary {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.55);
+  line-height: 1.6;
+  margin: 0 0 auto;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding-bottom: 14px;
+}
+
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  border-top: 1px solid #f0f0f0;
+  padding-top: 10px;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+/* Pagination */
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+/* Centered spinner */
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
