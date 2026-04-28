@@ -234,6 +234,39 @@ export default [
 	},
 
 	{
+		path: '/fitness',
+		name: 'Quản lý Sức khỏe',
+		icon: 'HeartOutlined',
+		routes: [
+			{
+				path: '/fitness/dashboard',
+				name: 'Tổng quan',
+				component: './FitnessTracking/Dashboard',
+			},
+			{
+				path: '/fitness/workout-log',
+				name: 'Nhật ký Tập luyện',
+				component: './FitnessTracking/WorkoutLog',
+			},
+			{
+				path: '/fitness/health-metrics',
+				name: 'Chỉ số Sức khỏe',
+				component: './FitnessTracking/HealthMetrics',
+			},
+			{
+				path: '/fitness/goals',
+				name: 'Mục tiêu',
+				component: './FitnessTracking/Goals',
+			},
+			{
+				path: '/fitness/exercise-library',
+				name: 'Thư viện Bài tập',
+				component: './FitnessTracking/ExerciseLibrary',
+			},
+		],
+	},
+
+	{
 		path: '/notification',
 		routes: [
 			{

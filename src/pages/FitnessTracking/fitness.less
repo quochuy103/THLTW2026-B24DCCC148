@@ -1,0 +1,103 @@
+
+.ft-custom-btn {
+  border-radius: 8px !important;
+  font-weight: 500;
+  transition: all 0.22s ease !important;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(82, 196, 26, 0.28);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.ft-btn-primary {
+  background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%) !important;
+  border: none !important;
+  color: #fff !important;
+
+  &:hover {
+    opacity: 0.92;
+    background: linear-gradient(135deg, #389e0d 0%, #52c41a 100%) !important;
+  }
+
+  &:focus {
+    background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%) !important;
+  }
+}
+
+.ft-btn-ghost {
+  border-radius: 8px !important;
+  border: 1.5px solid #52c41a !important;
+  color: #52c41a !important;
+  font-weight: 500;
+  background: transparent !important;
+  transition: all 0.22s ease !important;
+
+  &:hover {
+    background: #f6ffed !important;
+    transform: translateY(-1px);
+  }
+}
+
+.ft-btn-icon {
+  border-radius: 6px !important;
+  transition: all 0.18s ease !important;
+
+  &:hover {
+    background: rgba(82, 196, 26, 0.08) !important;
+    color: #52c41a !important;
+  }
+
+  &.ant-btn-dangerous:hover {
+    background: rgba(255, 77, 79, 0.08) !important;
+    color: #ff4d4f !important;
+  }
+}
+
+.ft-stat-card {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .ant-statistic-title {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.55);
+  }
+}
+
+.ft-exercise-card {
+  border-radius: 10px;
+  transition: all 0.22s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.ft-goal-card {
+  border-radius: 10px;
+  transition: all 0.22s ease;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.ft-inline-number .ant-input-number {
+  border-radius: 6px !important;
+  font-size: 13px;
+}
+
+.ft-difficulty-easy   { color: #52c41a; }
+.ft-difficulty-medium { color: #faad14; }
+.ft-difficulty-hard   { color: #ff4d4f; }
