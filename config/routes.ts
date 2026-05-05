@@ -234,6 +234,29 @@ export default [
 	},
 
 	{
+		path: '/task-management',
+		name: 'Quản lý Task',
+		icon: 'ProjectOutlined',
+		routes: [
+			{
+				path: '/task-management/dashboard',
+				name: 'Tổng quan',
+				component: './TaskManagement/Dashboard',
+			},
+			{
+				path: '/task-management/kanban',
+				name: 'Bảng Kanban',
+				component: './TaskManagement/KanbanBoard',
+			},
+			{
+				path: '/task-management/list',
+				name: 'Danh sách Task',
+				component: './TaskManagement/TaskList',
+			},
+		],
+	},
+
+	{
 		path: '/fitness',
 		name: 'Quản lý Sức khỏe',
 		icon: 'HeartOutlined',
